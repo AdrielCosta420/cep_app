@@ -1,10 +1,11 @@
-import 'dart:html';
-
 import 'package:cep_app/models/endereco_model.dart';
 import 'package:cep_app/pages/informations_adress_page.dart';
 import 'package:cep_app/repositories/cep_repository.dart';
 import 'package:cep_app/repositories/cep_repository_impl.dart';
+import 'package:cep_app/store/home.store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:logger/logger.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,11 +16,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final CepRepository cepRepository = CepRepositoryImpl();
-  EnderecoModel? enderecoModel;
   bool loading = false;
 
   final formKey = GlobalKey<FormState>();
   final cepEC = TextEditingController();
+  final HomeStore store = HomeStore();
 
   @override
   void dispose() {
@@ -41,9 +42,8 @@ class _HomePageState extends State<HomePage> {
             children: [
               SizedBox(
                 height: 300,
-                width: 300,
-                child: Image.network(
-                  'https://www.pngall.com/wp-content/uploads/5/Google-Maps-Location-Mark-PNG-HD-Image.png',
+                child: Image.asset(
+                  'image/maps.png',
                 ),
               ),
               Padding(
@@ -62,51 +62,55 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  MaterialPageRoute(
-                      builder: (context) => InformationsAdressPage());
-
-                  final valid = formKey.currentState?.validate() ?? false;
-                  if (valid) {
-                    try {
-                      setState(() {
-                        loading = true;
-                      });
-                      final endereco = await cepRepository.getCep(cepEC.text);
-                      setState(() {
-                        loading = false;
-                        enderecoModel = endereco;
-                      });
-                    } catch (e) {
-                      setState(() {
-                        loading = false;
-                        enderecoModel = null;
-                      });
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          backgroundColor: Colors.red,
-                          content: Text(
-                            'Erro ao buscar CEP',
+              Observer(
+                builder: (_) {
+                  return ElevatedButton(
+                    onPressed: () async {
+                      store.isLoadingChange();
+                      final valid = formKey.currentState?.validate() ?? false;
+                      if (valid) {
+                        try {
+                          final endereco =
+                              await cepRepository.getCep(cepEC.text);
+                          store.enderecoChange(endereco);
+                          cepEC.clear();
+                          // ignore: use_build_context_synchronously
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                InformationsAdressPage(enderecoModel: endereco),
+                          ));
+                        } catch (e) {
+                          store.enderecoChange(null);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(
+                                'Erro ao buscar CEP',
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                      store.isLoadingChange();
+                    },
+                    child: !store.isLoading
+                        ? const Text('Buscar')
+                        : const SizedBox(
+                            height: 50,
+                            child: CircularProgressIndicator(),
                           ),
-                        ),
-                      );
-                    }
-                  }
+                  );
                 },
-                child: const Text('Buscar'),
               ),
-              Visibility(
-                  visible: loading,
-                  child: const CircularProgressIndicator(
-                    value: 30,
-                    strokeWidth: 1.5,
-                  )),
-              Visibility(
-                visible: enderecoModel != null,
-                child: Text(
-                  '${enderecoModel?.logradouro}, ${enderecoModel?.cep}, ${enderecoModel?.bairro}, ${enderecoModel?.localidade}, ${enderecoModel?.uf}',
-                ),
+              Observer(
+                builder: (_) {
+                  return Visibility(
+                    visible: store.enderecoModel != null,
+                    child: Text(
+                      '${store.enderecoModel?.logradouro}, ${store.enderecoModel?.cep}, ${store.enderecoModel?.bairro}, ${store.enderecoModel?.localidade}, ${store.enderecoModel?.uf}',
+                    ),
+                  );
+                },
               )
             ],
           ),
