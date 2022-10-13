@@ -1,11 +1,11 @@
-import 'package:cep_app/models/endereco_model.dart';
-import 'package:cep_app/pages/informations_adress_page.dart';
-import 'package:cep_app/repositories/cep_repository.dart';
-import 'package:cep_app/repositories/cep_repository_impl.dart';
-import 'package:cep_app/store/home.store.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'informations_adress_page.dart';
+import '../repositories/cep_repository.dart';
+import '../repositories/cep_repository_impl.dart';
+import '../store/home.store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:logger/logger.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -33,7 +33,11 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('LOCALIZA CEP'),
+        title: Text(
+          'LOCALIZA CEP',
+          style: GoogleFonts.adamina(
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -41,18 +45,23 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               SizedBox(
+                width: 350,
                 height: 300,
-                child: Image.asset(
-                  'image/maps.png',
-                ),
+                child: Image.asset('assets/image/maps.png'),
               ),
               Padding(
-                padding: const EdgeInsets.only(
-                    left: 12, right: 12, top: 100, bottom: 50),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
                 child: TextFormField(
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
-                      labelText: 'DIGITE UM CEP', hintText: 'ex: 12345678'),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                      ),
+                      labelText: 'PESQUISE POR CEP',
+                      hintText: 'ex: 12345678'),
                   controller: cepEC,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -62,9 +71,25 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15),
+                      ),
+                    ),
+                    labelText: 'PESQUISE POR ENDEREÇO',
+                  ),
+                ),
+              ),
               Observer(
                 builder: (_) {
                   return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        textStyle: const TextStyle(color: Colors.black)),
                     onPressed: () async {
                       store.isLoadingChange();
                       final valid = formKey.currentState?.validate() ?? false;
@@ -76,8 +101,8 @@ class _HomePageState extends State<HomePage> {
                           cepEC.clear();
                           // ignore: use_build_context_synchronously
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                InformationsAdressPage(enderecoModel: endereco),
+                            builder: (context) => InformationsAdressPage(
+                                enderecoModel: endereco, store: store),
                           ));
                         } catch (e) {
                           store.enderecoChange(null);
@@ -102,16 +127,6 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
               ),
-              Observer(
-                builder: (_) {
-                  return Visibility(
-                    visible: store.enderecoModel != null,
-                    child: Text(
-                      '${store.enderecoModel?.logradouro}, ${store.enderecoModel?.cep}, ${store.enderecoModel?.bairro}, ${store.enderecoModel?.localidade}, ${store.enderecoModel?.uf}',
-                    ),
-                  );
-                },
-              )
             ],
           ),
         ),

@@ -1,4 +1,4 @@
-import 'package:cep_app/models/endereco_model.dart';
+import '../models/endereco_model.dart';
 import 'package:mobx/mobx.dart';
 part 'home.store.g.dart';
 

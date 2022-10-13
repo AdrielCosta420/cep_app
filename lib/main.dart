@@ -1,3 +1,4 @@
+import 'package:cep_app/common/constants.dart';
 import 'package:cep_app/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
@@ -15,9 +16,17 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-          useMaterial3: true,
-          primarySwatch: Colors.blue,
-          appBarTheme: AppBarTheme(color: Colors.red)),
+        useMaterial3: true,
+        primarySwatch: kPrimaryColor,
+        appBarTheme: const AppBarTheme(color: kComponentsColor),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: kTextElevatedButtons,
+            backgroundColor: kComponentsColor,
+            
+          ),
+        ),
+      ),
       home: const HomePage(),
     );
   }
