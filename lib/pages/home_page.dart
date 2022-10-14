@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               SizedBox(
                 width: 350,
-                height: 300,
+                height: 350,
                 child: Image.asset('assets/image/maps.png'),
               ),
               Padding(
@@ -71,25 +71,10 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(15),
-                      ),
-                    ),
-                    labelText: 'PESQUISE POR ENDEREÇO',
-                  ),
-                ),
-              ),
               Observer(
                 builder: (_) {
                   return ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        textStyle: const TextStyle(color: Colors.black)),
+                    style: ElevatedButton.styleFrom(),
                     onPressed: () async {
                       store.isLoadingChange();
                       final valid = formKey.currentState?.validate() ?? false;
@@ -121,8 +106,11 @@ class _HomePageState extends State<HomePage> {
                     child: !store.isLoading
                         ? const Text('Buscar')
                         : const SizedBox(
-                            height: 50,
-                            child: CircularProgressIndicator(),
+                            height: 30,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              backgroundColor: Colors.white,
+                            ),
                           ),
                   );
                 },

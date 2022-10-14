@@ -15,11 +15,11 @@ class InformationsAdressPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 0,
         centerTitle: true,
         leading: IconButton(
             onPressed: () => Navigator.of(context).pop(),
             icon: const Icon(Icons.arrow_back_ios_new_outlined)),
-        title: const Text("ENDEREÇO"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -33,7 +33,7 @@ class InformationsAdressPage extends StatelessWidget {
                   children: [
                     Text(
                       '${store.enderecoModel?.logradouro}',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -41,7 +41,8 @@ class InformationsAdressPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text('${store.enderecoModel?.cep}',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
                   ],
                 ),
                 Row(
