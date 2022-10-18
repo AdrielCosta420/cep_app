@@ -74,7 +74,10 @@ class _HomePageState extends State<HomePage> {
               Observer(
                 builder: (_) {
                   return ElevatedButton(
-                    style: ElevatedButton.styleFrom(),
+                    style: ButtonStyle(
+                      minimumSize:
+                          MaterialStateProperty.all(const Size(200, 40)),
+                    ),
                     onPressed: () async {
                       store.isLoadingChange();
                       final valid = formKey.currentState?.validate() ?? false;
@@ -104,12 +107,14 @@ class _HomePageState extends State<HomePage> {
                       store.isLoadingChange();
                     },
                     child: !store.isLoading
-                        ? const Text('Buscar')
+                        ? const Text(
+                            'Buscar',
+                          )
                         : const SizedBox(
-                            height: 30,
+                            width: 20,
+                            height: 20,
                             child: CircularProgressIndicator(
                               color: Colors.white,
-                              backgroundColor: Colors.white,
                             ),
                           ),
                   );
