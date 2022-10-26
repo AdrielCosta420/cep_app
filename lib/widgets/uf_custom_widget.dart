@@ -1,6 +1,7 @@
 import 'package:cep_app/models/estados_model.dart';
 import 'package:cep_app/repositories/cep_repository.dart';
 import 'package:cep_app/repositories/cep_repository_impl.dart';
+import 'package:cep_app/store/home.store.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
@@ -14,11 +15,14 @@ class UfCustomWidget extends StatefulWidget {
 class _UfCustomWidgetState extends State<UfCustomWidget> {
   CepRepository repository = CepRepositoryImpl();
 
+
+
   @override
   Widget build(BuildContext context) {
     return DropdownSearch<EstadosModel>(
       asyncItems: repository.getEstados,
-      onChanged: (value) {},
+      onChanged: (value) {
+      },
       dropdownBuilder: _customDropDown,
       popupProps: PopupProps.dialog(
         itemBuilder: _customPopupItemBuilder,
@@ -28,7 +32,7 @@ class _UfCustomWidgetState extends State<UfCustomWidget> {
         dropdownSearchDecoration: InputDecoration(
           filled: true,
           labelText: 'Selecione UF',
-          contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
+          contentPadding: EdgeInsets.fromLTRB(12, 0, 0, 0),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(30))),
         ),

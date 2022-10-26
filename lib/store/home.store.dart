@@ -14,4 +14,14 @@ abstract class HomeStoreBase with Store {
   EnderecoModel? enderecoModel;
   @action
   void enderecoChange(EnderecoModel? value) => enderecoModel = value;
+
+  @observable
+  String? uf;
+  @action
+  void ufChange(String? value) => uf = value;
+
+  @observable
+  String? cidade;
+  @action
+  void cidadesChange(String? value) => cidade = value;
 }

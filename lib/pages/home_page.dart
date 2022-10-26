@@ -1,3 +1,4 @@
+import 'package:cep_app/widgets/cidade_custom_widget.dart';
 import 'package:cep_app/widgets/uf_custom_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -50,7 +51,18 @@ class _HomePageState extends State<HomePage> {
                 height: 350,
                 child: Image.asset('assets/image/maps.png'),
               ),
-              UfCustomWidget(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children:  [
+                    Expanded(flex: 3, child: CidadeCustomWidget()),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Expanded(flex: 1, child: UfCustomWidget()),
+                  ],
+                ),
+              ),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
