@@ -24,4 +24,25 @@ abstract class HomeStoreBase with Store {
   String? cidade;
   @action
   void cidadesChange(String? value) => cidade = value;
+
+  @observable
+  String? logradouro;
+
+  @action
+  void logradouroChange(String? value) => logradouro = value;
+
+  @observable
+  String? cep;
+
+  @action
+  void cepChange(String? value) => cep = value;
+
+  @action
+  void clean() {
+    enderecoModel = null;
+    uf = null;
+    cidade = null;
+    logradouro = null;
+    cep = null;
+  }
 }

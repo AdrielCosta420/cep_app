@@ -1,3 +1,4 @@
+import 'package:cep_app/models/endereco_model.dart';
 import 'package:cep_app/widgets/cidade_custom_widget.dart';
 import 'package:cep_app/widgets/uf_custom_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,9 +21,16 @@ class _HomePageState extends State<HomePage> {
   final CepRepository cepRepository = CepRepositoryImpl();
   bool loading = false;
 
-  final formKey = GlobalKey<FormState>();
+  late GlobalKey<FormState> formKey;
+
   final cepEC = TextEditingController();
   final HomeStore store = HomeStore();
+
+  @override
+  void initState() {
+    super.initState();
+    formKey = GlobalKey<FormState>();
+  }
 
   @override
   void dispose() {
@@ -43,23 +51,75 @@ class _HomePageState extends State<HomePage> {
       ),
       body: SingleChildScrollView(
         child: Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           key: formKey,
           child: Column(
             children: [
               SizedBox(
-                width: 350,
-                height: 350,
+                width: 200,
+                height: 200,
                 child: Image.asset('assets/image/maps.png'),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
-                  children:  [
-                    Expanded(flex: 3, child: CidadeCustomWidget()),
+                  children: [
+                    Expanded(
+                        flex: 3,
+                        child: CidadeCustomWidget(
+                          store: store,
+                        )),
                     const SizedBox(
                       width: 10,
                     ),
-                    const Expanded(flex: 1, child: UfCustomWidget()),
+                    Expanded(
+                        flex: 1,
+                        child: UfCustomWidget(
+                          store: store,
+                        )),
+                  ],
+                ),
+              ),
+              Observer(
+                builder: (context) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
+                    child: TextFormField(
+                      enabled: store.uf != null && store.cidade != null,
+                      onChanged: (value) => store.logradouroChange(value),
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30),
+                          ),
+                        ),
+                        labelText: 'INSIRA O LOGRADOURO',
+                      ),
+                    ),
+                  );
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 40),
+                child: Row(
+                  children: const [
+                    Expanded(
+                        child: Divider(
+                      endIndent: 10,
+                      indent: 25,
+                      color: Colors.black,
+                    )),
+                    Text(
+                      'OU',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                        child: Divider(
+                      indent: 10,
+                      endIndent: 25,
+                      color: Colors.black,
+                    ))
                   ],
                 ),
               ),
@@ -67,21 +127,32 @@ class _HomePageState extends State<HomePage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
                 child: TextFormField(
+                  cursorColor: Colors.black,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
-                          Radius.circular(15),
+                          Radius.circular(30),
                         ),
                       ),
                       labelText: 'PESQUISE POR CEP',
                       hintText: 'ex: 12345678'),
                   controller: cepEC,
+                  onChanged: (value) => store.cepChange(value),
                   validator: (value) {
+                    if (store.cidade != null) {
+                      return null;
+                    }
+                    if (store.uf != null) {
+                      return null;
+                    }
                     if (value == null || value.isEmpty) {
                       return 'CEP obrigatório';
                     }
-                    return null;
+                    if (value.length != 8) {
+                      return 'CEP invalido';
+                    }
+                    // return null;
                   },
                 ),
               ),
@@ -93,32 +164,58 @@ class _HomePageState extends State<HomePage> {
                           MaterialStateProperty.all(const Size(200, 40)),
                     ),
                     onPressed: () async {
-                      store.isLoadingChange();
-                      final valid = formKey.currentState?.validate() ?? false;
-                      if (valid) {
-                        try {
-                          final endereco =
-                              await cepRepository.getCep(cepEC.text);
-                          store.enderecoChange(endereco);
-                          cepEC.clear();
-                          // ignore: use_build_context_synchronously
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => InformationsAdressPage(
-                                enderecoModel: endereco, store: store),
-                          ));
-                        } catch (e) {
-                          store.enderecoChange(null);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              backgroundColor: Colors.red,
-                              content: Text(
-                                'Erro ao buscar CEP',
+                      if (formKey.currentState!.validate()) {
+                        store.isLoadingChange();
+                        if (store.cidade != null &&
+                            store.uf != null &&
+                            store.logradouro != null) {
+                          try {
+                            final enderecos =
+                                await cepRepository.getByNameLogradouro(
+                              uf: store.uf ?? "",
+                              cidade: store.cidade ?? "",
+                              logradouro: store.logradouro ?? "",
+                            );
+                            showAlertEnderecosModel(context, enderecos);
+                          } catch (e) {
+                            store.enderecoChange(null);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                backgroundColor: Colors.red,
+                                content: Text(
+                                  'Erro ao buscar Endereço',
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          }
+                        } else {
+                          try {
+                            final endereco =
+                                await cepRepository.getByCep(cepEC.text);
+                            store.enderecoChange(endereco);
+                            cepEC.clear();
+                            // ignore: use_build_context_synchronously
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                              builder: (context) => InformationsAdressPage(
+                                enderecoModel: endereco,
+                              ),
+                            ));
+                            store.clean();
+                          } catch (e) {
+                            store.enderecoChange(null);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                backgroundColor: Colors.red,
+                                content: Text(
+                                  'Erro ao buscar CEP',
+                                ),
+                              ),
+                            );
+                          }
                         }
+                        store.isLoadingChange();
                       }
-                      store.isLoadingChange();
                     },
                     child: !store.isLoading
                         ? const Text(
@@ -138,6 +235,34 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+    );
+  }
+
+  void showAlertEnderecosModel(BuildContext context, List<EnderecoModel> list) {
+    AlertDialog alerta = AlertDialog(
+      title: const Text("Selecione Endereço"),
+      content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: list
+              .map((e) => ListTile(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) =>
+                            InformationsAdressPage(enderecoModel: e),
+                      ));
+                      store.clean();
+                    },
+                    title: Text(e.logradouro),
+                  ))
+              .toList()),
+    );
+    // exibe o dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alerta;
+      },
     );
   }
 }

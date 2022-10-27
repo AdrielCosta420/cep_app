@@ -1,6 +1,8 @@
 import 'package:cep_app/common/constants.dart';
 import 'package:cep_app/pages/home_page.dart';
+import 'package:cep_app/pages/informations_adress_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,6 +30,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: const HomePage(),
+      
     );
   }
 }

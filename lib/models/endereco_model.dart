@@ -43,4 +43,12 @@ class EnderecoModel {
 
   factory EnderecoModel.fromJson(String source) =>
       EnderecoModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  factory EnderecoModel.empty() => EnderecoModel(
+      cep: "",
+      logradouro: "",
+      complemento: "",
+      bairro: "",
+      localidade: "",
+      uf: "");
 }

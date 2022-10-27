@@ -41,6 +41,68 @@ mixin _$HomeStore on HomeStoreBase, Store {
     });
   }
 
+  late final _$ufAtom = Atom(name: 'HomeStoreBase.uf', context: context);
+
+  @override
+  String? get uf {
+    _$ufAtom.reportRead();
+    return super.uf;
+  }
+
+  @override
+  set uf(String? value) {
+    _$ufAtom.reportWrite(value, super.uf, () {
+      super.uf = value;
+    });
+  }
+
+  late final _$cidadeAtom =
+      Atom(name: 'HomeStoreBase.cidade', context: context);
+
+  @override
+  String? get cidade {
+    _$cidadeAtom.reportRead();
+    return super.cidade;
+  }
+
+  @override
+  set cidade(String? value) {
+    _$cidadeAtom.reportWrite(value, super.cidade, () {
+      super.cidade = value;
+    });
+  }
+
+  late final _$logradouroAtom =
+      Atom(name: 'HomeStoreBase.logradouro', context: context);
+
+  @override
+  String? get logradouro {
+    _$logradouroAtom.reportRead();
+    return super.logradouro;
+  }
+
+  @override
+  set logradouro(String? value) {
+    _$logradouroAtom.reportWrite(value, super.logradouro, () {
+      super.logradouro = value;
+    });
+  }
+
+  late final _$cepAtom = Atom(name: 'HomeStoreBase.cep', context: context);
+
+  @override
+  String? get cep {
+    _$cepAtom.reportRead();
+    return super.cep;
+  }
+
+  @override
+  set cep(String? value) {
+    _$cepAtom.reportWrite(value, super.cep, () {
+      super.cep = value;
+    });
+  }
+
   late final _$HomeStoreBaseActionController =
       ActionController(name: 'HomeStoreBase', context: context);
 
@@ -67,10 +129,69 @@ mixin _$HomeStore on HomeStoreBase, Store {
   }
 
   @override
+  void ufChange(String? value) {
+    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
+        name: 'HomeStoreBase.ufChange');
+    try {
+      return super.ufChange(value);
+    } finally {
+      _$HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void cidadesChange(String? value) {
+    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
+        name: 'HomeStoreBase.cidadesChange');
+    try {
+      return super.cidadesChange(value);
+    } finally {
+      _$HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void logradouroChange(String? value) {
+    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
+        name: 'HomeStoreBase.logradouroChange');
+    try {
+      return super.logradouroChange(value);
+    } finally {
+      _$HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void cepChange(String? value) {
+    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
+        name: 'HomeStoreBase.cepChange');
+    try {
+      return super.cepChange(value);
+    } finally {
+      _$HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clean() {
+    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
+        name: 'HomeStoreBase.clean');
+    try {
+      return super.clean();
+    } finally {
+      _$HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isLoading: ${isLoading},
-enderecoModel: ${enderecoModel}
+enderecoModel: ${enderecoModel},
+uf: ${uf},
+cidade: ${cidade},
+logradouro: ${logradouro},
+cep: ${cep}
     ''';
   }
 }

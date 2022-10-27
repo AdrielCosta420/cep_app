@@ -1,12 +1,18 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter/material.dart';
+
 import 'package:cep_app/models/estados_model.dart';
 import 'package:cep_app/repositories/cep_repository.dart';
 import 'package:cep_app/repositories/cep_repository_impl.dart';
 import 'package:cep_app/store/home.store.dart';
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/material.dart';
 
 class UfCustomWidget extends StatefulWidget {
-  const UfCustomWidget({Key? key}) : super(key: key);
+  HomeStore store;
+  UfCustomWidget({
+    Key? key,
+    required this.store,
+  }) : super(key: key);
 
   @override
   State<UfCustomWidget> createState() => _UfCustomWidgetState();
@@ -15,14 +21,19 @@ class UfCustomWidget extends StatefulWidget {
 class _UfCustomWidgetState extends State<UfCustomWidget> {
   CepRepository repository = CepRepositoryImpl();
 
-
-
   @override
   Widget build(BuildContext context) {
     return DropdownSearch<EstadosModel>(
-      asyncItems: repository.getEstados,
-      onChanged: (value) {
+      validator: (value) {
+        if (widget.store.cep != null) {
+          return null;
+        }
+        return value == null ? "Campo Obrigatorio" : null;
       },
+      asyncItems: (_) => repository.getEstados(widget.store.uf ?? ""),
+      onChanged: (value) => widget.store.ufChange(value?.sigla ?? ""),
+      filterFn: (item, filter) =>
+          item.sigla?.toLowerCase().contains(filter.toLowerCase()) ?? false,
       dropdownBuilder: _customDropDown,
       popupProps: PopupProps.dialog(
         itemBuilder: _customPopupItemBuilder,

@@ -1,3 +1,4 @@
+import 'package:cep_app/pages/home_page.dart';
 import 'package:cep_app/store/home.store.dart';
 import 'package:cep_app/widgets/row_card_custom_widget.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -7,9 +8,7 @@ import '../models/endereco_model.dart';
 import 'package:flutter/material.dart';
 
 class InformationsAdressPage extends StatelessWidget {
-  final HomeStore store;
-  const InformationsAdressPage(
-      {Key? key, required this.enderecoModel, required this.store})
+  const InformationsAdressPage({Key? key, required this.enderecoModel})
       : super(key: key);
   final EnderecoModel enderecoModel;
 
@@ -21,7 +20,10 @@ class InformationsAdressPage extends StatelessWidget {
             style: GoogleFonts.adamina(color: Colors.white, fontSize: 25)),
         centerTitle: true,
         leading: IconButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () =>
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => const HomePage(),
+                )),
             icon: const Icon(
               Icons.arrow_back_ios_new_outlined,
               color: Colors.white,
@@ -38,38 +40,17 @@ class InformationsAdressPage extends StatelessWidget {
               child: Column(
                 children: [
                   RowCardCustomWidget(
-                    text: 'Logradouro:',
-                    store: store.enderecoModel?.logradouro,
+                    title: 'Logradouro:',
+                    value: enderecoModel.logradouro,
                   ),
+                  RowCardCustomWidget(title: 'Cep:', value: enderecoModel.cep),
                   RowCardCustomWidget(
-                      text: 'Cep:', store: store.enderecoModel?.cep),
+                      title: 'Bairro:', value: enderecoModel.bairro),
                   RowCardCustomWidget(
-                      text: 'Bairro:', store: store.enderecoModel?.bairro),
+                      title: 'Complemento:', value: enderecoModel.complemento),
                   RowCardCustomWidget(
-                      text: 'Complemento:',
-                      store: store.enderecoModel?.complemento),
-                  RowCardCustomWidget(
-                      text: 'Localidade:',
-                      store: store.enderecoModel?.localidade),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: Text(
-                          'UF:',
-                          style:
-                              GoogleFonts.adamina(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Text('${store.enderecoModel?.uf}',
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold)),
-                      )
-                    ],
-                  ),
+                      title: 'Localidade:', value: enderecoModel.localidade),
+                  RowCardCustomWidget(title: 'UF', value: enderecoModel.uf),
                 ],
               ),
             ),
