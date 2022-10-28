@@ -45,21 +45,23 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             onPressed: () {
-              store.clean();
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => HomePage()));
             },
             icon: Icon(
               Icons.refresh,
-              color: Colors.green.shade500,
+              color: Colors.white,
+              // color: Colors.green.shade500,
               size: 27,
             ),
           )
         ],
-        backgroundColor: Colors.grey.shade300,
+        backgroundColor: Color(0xFFE0441B),
         centerTitle: true,
         title: Text(
           'LOCALIZA CEP',
           style: GoogleFonts.adamina(
-              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
       body: SingleChildScrollView(

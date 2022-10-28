@@ -28,13 +28,13 @@ class CepRepositoryImpl implements CepRepository {
       final response = await Dio().get(
           'https://servicodados.ibge.gov.br/api/v1/localidades/estados/$uf/distritos');
 
-      List<CidadesModel> list = [];
+      List<CidadesModel> listCidade = [];
 
       for (var element in response.data) {
-        list.add(CidadesModel.fromMap(element));
+        listCidade.add(CidadesModel.fromMap(element));
       }
 
-      return list;
+      return listCidade;
     } on DioError catch (e) {
       logger.d('Erro ao buscar CIDADE');
       logger.e(e.message);
@@ -48,11 +48,11 @@ class CepRepositoryImpl implements CepRepository {
       final response = await Dio()
           .get('https://servicodados.ibge.gov.br/api/v1/localidades/estados/');
 
-      List<EstadosModel> list = [];
+      List<EstadosModel> listEstado = [];
       for (var element in response.data) {
-        list.add(EstadosModel.fromMap(element));
+        listEstado.add(EstadosModel.fromMap(element));
       }
-      return list;
+      return listEstado;
     } on DioError catch (e) {
       logger.d('Erro ao buscar Estado');
       logger.e(e.message);
