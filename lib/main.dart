@@ -1,8 +1,6 @@
 import 'package:cep_app/common/constants.dart';
 import 'package:cep_app/pages/home_page.dart';
-import 'package:cep_app/pages/informations_adress_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,18 +17,15 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         useMaterial3: true,
-        primarySwatch: kPrimaryColor,
         appBarTheme: const AppBarTheme(color: kComponentsColor),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             foregroundColor: kTextElevatedButtons,
             backgroundColor: kComponentsColor,
-            
           ),
         ),
       ),
       home: const HomePage(),
-      
     );
   }
 }

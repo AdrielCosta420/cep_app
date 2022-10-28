@@ -1,7 +1,5 @@
 import 'package:cep_app/pages/home_page.dart';
-import 'package:cep_app/store/home.store.dart';
 import 'package:cep_app/widgets/row_card_custom_widget.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../models/endereco_model.dart';
@@ -16,8 +14,9 @@ class InformationsAdressPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.grey.shade300,
         title: Text(enderecoModel.logradouro,
-            style: GoogleFonts.adamina(color: Colors.white, fontSize: 25)),
+            style: GoogleFonts.adamina(color: Colors.black, fontSize: 25)),
         centerTitle: true,
         leading: IconButton(
             onPressed: () =>
@@ -26,7 +25,7 @@ class InformationsAdressPage extends StatelessWidget {
                 )),
             icon: const Icon(
               Icons.arrow_back_ios_new_outlined,
-              color: Colors.white,
+              color: Colors.black87,
             )),
       ),
       body: SingleChildScrollView(

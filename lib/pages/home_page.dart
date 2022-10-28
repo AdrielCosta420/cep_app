@@ -42,11 +42,24 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {
+              store.clean();
+            },
+            icon: Icon(
+              Icons.refresh,
+              color: Colors.green.shade500,
+              size: 27,
+            ),
+          )
+        ],
+        backgroundColor: Colors.grey.shade300,
         centerTitle: true,
         title: Text(
           'LOCALIZA CEP',
           style: GoogleFonts.adamina(
-              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
         ),
       ),
       body: SingleChildScrollView(
@@ -56,8 +69,8 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               SizedBox(
-                width: 200,
-                height: 200,
+                width: 230,
+                height: 250,
                 child: Image.asset('assets/image/maps.png'),
               ),
               Padding(
@@ -65,18 +78,20 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   children: [
                     Expanded(
-                        flex: 3,
-                        child: CidadeCustomWidget(
-                          store: store,
-                        )),
+                      flex: 1,
+                      child: UfCustomWidget(
+                        store: store,
+                      ),
+                    ),
                     const SizedBox(
                       width: 10,
                     ),
                     Expanded(
-                        flex: 1,
-                        child: UfCustomWidget(
-                          store: store,
-                        )),
+                      flex: 3,
+                      child: CidadeCustomWidget(
+                        store: store,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -89,12 +104,17 @@ class _HomePageState extends State<HomePage> {
                       enabled: store.uf != null && store.cidade != null,
                       onChanged: (value) => store.logradouroChange(value),
                       decoration: const InputDecoration(
-                        border: OutlineInputBorder(
+                        /*border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(30),
                           ),
+                        )*/
+                        icon: Icon(Icons.manage_search_rounded,
+                            color: Colors.blue),
+                        label: Text(
+                          'insira o endereço',
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        labelText: 'INSIRA O LOGRADOURO',
                       ),
                     ),
                   );
@@ -135,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                           Radius.circular(30),
                         ),
                       ),
-                      labelText: 'PESQUISE POR CEP',
+                      labelText: 'PESQUISA POR CEP',
                       hintText: 'ex: 12345678'),
                   controller: cepEC,
                   onChanged: (value) => store.cepChange(value),
@@ -240,7 +260,10 @@ class _HomePageState extends State<HomePage> {
 
   void showAlertEnderecosModel(BuildContext context, List<EnderecoModel> list) {
     AlertDialog alerta = AlertDialog(
-      title: const Text("Selecione Endereço"),
+      title: const Text(
+        "selecione endereço:",
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
       content: Column(
           mainAxisSize: MainAxisSize.min,
           children: list

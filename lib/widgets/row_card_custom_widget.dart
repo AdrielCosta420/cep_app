@@ -13,18 +13,42 @@ class RowCardCustomWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          Expanded(flex: 1, child: Text(title)),
-          Expanded(
-            flex: 1,
-            child: Text(value),
-          ),
-        ],
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.centerRight,
+          end: Alignment.bottomLeft,
+          colors: [
+            Color(0xFFd8fcb3),
+            Color(0xFFb1fcb3),
+          ],
+        ),
       ),
-    ));
+      child: Card(
+        shadowColor: Colors.grey,
+        shape: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Expanded(
+                  flex: 1,
+                  child: Text(
+                    title,
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  )),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  value,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
