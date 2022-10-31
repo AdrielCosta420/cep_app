@@ -19,8 +19,8 @@ class RowCardCustomWidget extends StatelessWidget {
           begin: Alignment.centerRight,
           end: Alignment.bottomLeft,
           colors: [
-            Color(0xFFd8fcb3),
-            Color(0xFFb1fcb3),
+            Color.fromARGB(255, 219, 113, 113),
+            Color.fromARGB(255, 194, 105, 117),
           ],
         ),
       ),

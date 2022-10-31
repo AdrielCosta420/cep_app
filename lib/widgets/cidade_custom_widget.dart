@@ -29,7 +29,7 @@ class CidadeCustomWidget extends StatelessWidget {
             if (store.cep != null) {
               return null;
             }
-            return value == null ? "Campo Obrigatoriuuu" : null;
+            return value == null ? "Campo Obrigatório" : null;
           },
           filterFn: (item, filter) =>
               item.nome?.toUpperCase().contains(filter.toUpperCase()) ?? false,

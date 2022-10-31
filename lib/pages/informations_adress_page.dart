@@ -14,19 +14,20 @@ class InformationsAdressPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey.shade300,
+        backgroundColor: Color(0xFFE0441B),
         title: Text(enderecoModel.logradouro,
-            style: GoogleFonts.adamina(color: Colors.black, fontSize: 25)),
+            style: GoogleFonts.adamina(color: Colors.white, fontSize: 25)),
         centerTitle: true,
         leading: IconButton(
-            onPressed: () =>
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => const HomePage(),
-                )),
-            icon: const Icon(
-              Icons.arrow_back_ios_new_outlined,
-              color: Colors.black87,
-            )),
+          onPressed: () =>
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => const HomePage(),
+          )),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_outlined,
+            color: Colors.white,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
